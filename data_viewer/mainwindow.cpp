@@ -175,13 +175,13 @@ void MainWindow::on_removePlot_clicked()
         return;
 
     bool ok = false;
-    QCustomPlot *p_plot = plot.plotList[0].customPlot;
+    //QCustomPlot *p_plot = plot.plotList[0].customPlot;
 
     plot.removePlot(plot.plotFocusedIndex,ok);
     if(ok == true)
     {
-        ui->plotLayout->removeItem(ui->plotLayout->itemAt(plot.plotFocusedIndex));
-        delete p_plot;
+        ui->plotLayout->removeItem(ui->plotLayout->itemAt(plot.plotFocusedIndex));//if there is still problem, delete this line
+        delete ui->plotLayout->itemAt(plot.plotFocusedIndex)->widget();
     }
 
     //update all plot
