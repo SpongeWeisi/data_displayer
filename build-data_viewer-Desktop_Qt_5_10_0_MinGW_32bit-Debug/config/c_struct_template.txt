@@ -1,0 +1,13 @@
+__packed struct result_package
+{
+    uint8_t    package_header;
+    uint8_t    package_id;
+    uint8_t    data1;
+    int8_t      data2;
+    uint16_t  data3;
+    int16_t    data4;
+    uint32_t  data5;
+    int32_t    data6;
+    float        data7;
+    uint8_t    check_sum;
+}

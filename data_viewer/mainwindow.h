@@ -13,6 +13,14 @@
 #include "../QCustomPlot/qcustomplot.h"
 #include "com_settingsdialog.h"
 
+#include "../QChart/chartview.h"
+#include <QtCharts/QScatterSeries>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QSplineSeries>
+#include <QtCharts/QAreaSeries>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QPolarChart>
+
 namespace Ui {
 class MainWindow;
 }
@@ -32,6 +40,7 @@ public:
 
     QTimer plotTimer;
     bool plotTimerStart;
+    int plotPeriod;
 
     void addNewPlot(int packIndex, int dataIndex);
     void addOutputText(QString str);
@@ -40,6 +49,13 @@ public:
     SettingsDialog *comSettings;
     QSerialPort *serial;
     QByteArray comBuffer;
+
+    //array
+    int arraySize;
+
+    //QChart
+    ChartView *chartView;
+    QMainWindow arrayWindow;
 
 private slots:
     /*******************************************/

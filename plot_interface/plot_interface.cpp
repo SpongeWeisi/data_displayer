@@ -9,14 +9,14 @@ PlotInterface::PlotInterface(QObject *parent) :
 
     colorMap.insert(0,QPen(Qt::blue));
     colorMap.insert(1,QPen(Qt::red));
-    colorMap.insert(2,QPen(Qt::yellow));
-    colorMap.insert(3,QPen(Qt::green));
+    colorMap.insert(2,QPen(Qt::darkGreen));
+    colorMap.insert(3,QPen(Qt::darkYellow));
     colorMap.insert(4,QPen(Qt::cyan));
     colorMap.insert(5,QPen(Qt::darkGray));
     colorMap.insert(6,QPen(Qt::darkBlue));
     colorMap.insert(7,QPen(Qt::darkRed));
-    colorMap.insert(8,QPen(Qt::darkYellow));
-    colorMap.insert(9,QPen(Qt::darkGreen));
+    colorMap.insert(8,QPen(Qt::yellow));
+    colorMap.insert(9,QPen(Qt::green));
     colorMap.insert(10,QPen(Qt::darkCyan));
     colorMap.insert(11,QPen(Qt::darkMagenta));
     colorMap.insert(12,QPen(Qt::black));
@@ -172,12 +172,13 @@ QString PlotInterface::removeGraph(int plotIndex, int dataIndex)
     return "Remove graph OK";
 }
 
-QString PlotInterface::addPlotData(PackageInterface &packageInterface)
+QString PlotInterface::addPlotData(PackageInterface &packageInterface, int plotPeriod)
 {
     if(plotList.isEmpty())
         return "Plot list is empty";
 
-    plotKey += 0.05;//50ms
+
+    plotKey += ((float)plotPeriod)/1000;//50ms
     for(int cnt = 0;cnt < plotList.size();cnt++)
     {
         for(int graph_cnt = 0;graph_cnt < plotList[cnt].graphList.size();graph_cnt++)
@@ -249,5 +250,5 @@ QString PlotInterface::clearPlot(void)
     }
     plotKey = 0;
 
-    return "Update plot OK";
+    return "Clear plot OK";
 }

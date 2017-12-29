@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -23,13 +24,15 @@ SOURCES += main.cpp\
     ../QCustomPlot/qcustomplot.cpp \
     ../plot_interface/plot_interface.cpp \
     ../package_interface/package_interface.cpp \
-    com_settingsdialog.cpp
+    com_settingsdialog.cpp \
+    ../QChart/chartview.cpp
 
 HEADERS  += mainwindow.h \
     ../QCustomPlot/qcustomplot.h \
     ../plot_interface/plot_interface.h \
     ../package_interface/package_interface.h \
-    com_settingsdialog.h
+    com_settingsdialog.h \
+    ../QChart/chartview.h
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui

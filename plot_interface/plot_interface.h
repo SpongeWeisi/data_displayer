@@ -55,7 +55,7 @@ public:
     QString removeGraph(int plotIndex, int dataIndex);
     QString updatePlot(void);
     QString clearPlot(void);
-    QString addPlotData(PackageInterface &packageInterface);
+    QString addPlotData(PackageInterface &packageInterface, int plotPeriod);
     QString updatePlotTable(QTableWidget *table);
 };
 

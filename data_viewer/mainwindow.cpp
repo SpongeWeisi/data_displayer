@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -21,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     /**********************************************/
     connect(&plotTimer, SIGNAL(timeout()), this, SLOT(plotUpdate()));
     plotTimerStart = false;
+    plotPeriod = 50;//50ms
 
     /**********************************************/
     serial = new QSerialPort(this);
@@ -28,6 +31,32 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, SIGNAL(readyRead()), this, SLOT(readComBuffer()));
     connect(serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
+
+    /**********************************************/
+    on_readConfigFile_clicked();
+    addNewPlot(0,0);
+    //plot.updatePlotTable(ui->plotTable);
+    addOutputText(plot.addNewGraph(0, package, 0, 1));
+
+    addNewPlot(0,2);
+    addOutputText(plot.addNewGraph(1, package, 0, 3));
+
+    addNewPlot(0,4);
+    addOutputText(plot.addNewGraph(2, package, 0, 5));
+
+    plot.updatePlotTable(ui->plotTable);
+    plot.updatePlot();
+
+    /**********************************************/
+    arraySize = 280 * 2;
+
+    chartView = new ChartView();
+    chartView->initPolarChart();
+
+    arrayWindow.setCentralWidget(chartView);
+    arrayWindow.resize(800, 600);
+    arrayWindow.show();
+
 }
 
 MainWindow::~MainWindow()
@@ -65,7 +94,11 @@ void MainWindow::addOutputText(QString str)
 
 void MainWindow::plotUpdate(void)
 {
-    plot.addPlotData(package);
+    plot.addPlotData(package, plotPeriod);
+
+    char *p_pack = 0;
+    int size = 0;
+    chartView->updateData(p_pack, size);
 }
 
 void MainWindow::readComBuffer()
@@ -74,13 +107,23 @@ void MainWindow::readComBuffer()
 
     while(comBuffer.isEmpty() == false)
     {
-        unsigned char data = comBuffer[0];
         unsigned char size;
+        unsigned char header = comBuffer[0];//for the warning
 
-        if(data == 0x55)
+        if(0x55 == header && comBuffer.size() > 1)
         {
+            unsigned char id = comBuffer[1];//for the warning
+
             //real package size = header + id + data + checksum = 1 + 1 + size + 1 = size + 3
-            size = package.packageList[package.packageIdMap[comBuffer[1]]].packageSize;
+            if(0xff == id)
+            {
+                size = arraySize;
+            }
+            else
+            {
+                size = package.packageList[package.packageIdMap[comBuffer[1]]].packageSize;
+            }
+
             if(size + 3 > comBuffer.size())
             {
                 break;
@@ -97,10 +140,22 @@ void MainWindow::readComBuffer()
                 if(checksum == (unsigned char)comBuffer[size + 3 - 1])
                 {
                     char *p_pack = (char*)comBuffer.constData();
-                    package.readPackage(comBuffer[1],(p_pack+2),size);
 
-                    package.updateDataColumn(ui->dataTable,package.packageIdMap[comBuffer[1]]);
-                    package.updatePackageCountColumn(ui->packageTable,package.packageIdMap[comBuffer[1]]);
+                    if(0xff == id)
+                    {
+
+                    }
+                    else
+                    {
+                        package.readPackage(comBuffer[1],(p_pack+2),size);
+
+                        package.updateDataColumn(ui->dataTable,package.packageIdMap[comBuffer[1]]);
+                        package.updatePackageCountColumn(ui->packageTable,package.packageIdMap[comBuffer[1]]);
+                    }
+                }
+                else
+                {
+                    qDebug()<<"check sum error";
                 }
 
                 comBuffer.remove(0,size+3);
@@ -180,7 +235,7 @@ void MainWindow::on_removePlot_clicked()
     plot.removePlot(plot.plotFocusedIndex,ok);
     if(ok == true)
     {
-        ui->plotLayout->removeItem(ui->plotLayout->itemAt(plot.plotFocusedIndex));//if there is still problem, delete this line
+        //ui->plotLayout->removeItem(ui->plotLayout->itemAt(plot.plotFocusedIndex));//if there is still problem, delete this line
         delete ui->plotLayout->itemAt(plot.plotFocusedIndex)->widget();
     }
 
@@ -205,7 +260,7 @@ void MainWindow::on_startPlot_clicked()
     if(plotTimerStart == false)
     {
         plotTimerStart = true;
-        plotTimer.start(50);
+        plotTimer.start(plotPeriod);
         ui->startPlot->setText("stop plot");
 
         ui->removePlot->setEnabled(false);

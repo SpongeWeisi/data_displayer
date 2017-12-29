@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\qcustomplot.o
+./release\plot_interface.o
+./release\package_interface.o
+./release\com_settingsdialog.o
+./release\chartview.o
+./release\moc_mainwindow.o
+./release\moc_qcustomplot.o
+./release\moc_com_settingsdialog.o
+);

@@ -80,8 +80,6 @@ QString PackageInterface::readConfigFile(QSettings &settings)
             dataInfo.dataName = keyList[data_cnt].mid(3);
             dataInfo.dataTypeName = settings.value(keyList[data_cnt]).toString();
 
-            qDebug()<<dataInfo.dataName<<dataInfo.dataTypeName;
-
             if(dataSignMap.contains(settings.value(keyList[data_cnt]).toString()))
             {
                 dataInfo.data.setValue(0);
@@ -125,14 +123,14 @@ QString PackageInterface::readConfigFile(QSettings &settings)
     // for debug /////////////////////////////////////////////////////////////////////////////////
     for(int pack_cnt = 0;pack_cnt < packageList.size();pack_cnt++)
     {
+        qDebug()<<"Package info";
         qDebug()<<packageList[pack_cnt].packageName<<packageList[pack_cnt].packageId
                <<packageList[pack_cnt].packageSize;
 
-
+        qDebug()<<"Data info";
         for(int data_cnt = 0;data_cnt < packageList[pack_cnt].dataList.size();data_cnt++)
         {
-            qDebug()<<packageList[pack_cnt].dataList[data_cnt].data.toInt()
-                   <<packageList[pack_cnt].dataList[data_cnt].dataName
+            qDebug()<<packageList[pack_cnt].dataList[data_cnt].dataName
                   <<packageList[pack_cnt].dataList[data_cnt].dataSize
                  <<packageList[pack_cnt].dataList[data_cnt].data.typeName();
         }

@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\qcustomplot.o
+./debug\plot_interface.o
+./debug\package_interface.o
+./debug\com_settingsdialog.o
+./debug\chartview.o
+./debug\moc_mainwindow.o
+./debug\moc_qcustomplot.o
+./debug\moc_com_settingsdialog.o
+);
