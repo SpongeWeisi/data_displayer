@@ -32,7 +32,13 @@
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QPolarChart>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QAreaSeries>
 #include <QtCharts/QScatterSeries>
+#include <QtCharts/QSplineSeries>
+
+
+#define ARRAY_SIZE 560
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -42,9 +48,14 @@ public:
     ChartView(QWidget *parent = 0);
     void initPolarChart(void);
     void updateData(char *p_pack, int size);
+    void updatePlot();
 
     QScatterSeries *series1;
+    QSplineSeries *series2;
+    QAreaSeries *series3;
     QPolarChart *polarChart;
+
+    int16_t data[ARRAY_SIZE];
 
 protected:
     void keyPressEvent(QKeyEvent *event);

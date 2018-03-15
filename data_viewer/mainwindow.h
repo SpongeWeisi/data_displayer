@@ -21,6 +21,8 @@
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QPolarChart>
 
+#define ARRAY_SIZE 560
+
 namespace Ui {
 class MainWindow;
 }
@@ -53,7 +55,7 @@ public:
     //array
     int arraySize;
 
-    //QChart
+    //QChartt
     ChartView *chartView;
     QMainWindow arrayWindow;
 

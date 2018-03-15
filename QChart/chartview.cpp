@@ -79,19 +79,30 @@ void ChartView::initPolarChart(void)
     const qreal angularMax = 360;
 
     const qreal radialMin = 0;
-    const qreal radialMax = 600;
+    const qreal radialMax = 10000;
 
     series1 = new QScatterSeries();
+    series1->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+    series1->setMarkerSize(5.0);
+    series1->setBorderColor(series1->color());
 
     for (int i = angularMin; i <= angularMax; i += 10)
         series1->append(i, (i / radialMax) * radialMax + 8.0);
 
-    series1->setMarkerSize(10.0);
+    series2 = new QSplineSeries();
+    series2->setName("spline");
+    for (int i = 135; i <= 225; i += 10)
+        series2->append(i, 10000);
+
+    series3 = new QAreaSeries();
+    series3->setUpperSeries(series2);
 
     //![1]
     polarChart = new QPolarChart();
     //![1]
     polarChart->addSeries(series1);
+    polarChart->addSeries(series2);
+    polarChart->addSeries(series3);
 
     //![2]
     QValueAxis *angularAxis = new QValueAxis();
@@ -107,7 +118,14 @@ void ChartView::initPolarChart(void)
 
     series1->attachAxis(radialAxis);
     series1->attachAxis(angularAxis);
+    series2->attachAxis(radialAxis);
+    series2->attachAxis(angularAxis);
+    series3->attachAxis(radialAxis);
+    series3->attachAxis(angularAxis);
 
+    series2->setVisible(false);
+    series3->setOpacity(0.3);
+    series3->setColor(Qt::gray);
 
     radialAxis->setRange(radialMin, radialMax);
     angularAxis->setRange(angularMin, angularMax);
@@ -115,18 +133,47 @@ void ChartView::initPolarChart(void)
     polarChart->legend()->setVisible(false);
 
     setChart(polarChart);
-    setRenderHint(QPainter::Antialiasing);
+    //setRenderHint(QPainter::Antialiasing);
 }
 
 void ChartView::updateData(char *p_pack, int size)
 {
-    QTime tmp = QTime::currentTime();
-    qsrand(tmp.msec()+tmp.second()*1000);
+    for(int count = 0;count < ARRAY_SIZE;count++)
+    {
+        data[count] = *((int16_t*)(p_pack + count * 2));
+    }
 
+    for(int count = 0;count < ARRAY_SIZE - 2;count++)
+    {
+        if(data[count] == data[count+1] && data[count] == data[count+2])
+        {
+            data[count] = 0;
+            data[count+1] = 0;
+            data[count+2] = 0;
+
+            count += 2;
+            if(count >= ARRAY_SIZE)
+                break;
+        }
+    }
+}
+
+void ChartView::updatePlot()
+{
     series1->clear();
 
-    for (int i = 0; i <= 360; i += 1)
-        series1->append(i, qrand()%600);
+    for(int count = 0;count < ARRAY_SIZE;count++)
+    {
+        if(data[count] == 0)
+            continue;
+
+        float angle = (float)count/ARRAY_SIZE * 360;
+        angle = (int)(angle + 360 - 145) % 360;
+        angle = 360 - angle;
+
+        if(angle < 135 || angle > 225)
+            series1->append(angle, (float)data[count]);
+    }
 
     polarChart->update();
 }

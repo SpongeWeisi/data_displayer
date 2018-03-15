@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     plot.updatePlot();
 
     /**********************************************/
-    arraySize = 280 * 2;
+    arraySize = ARRAY_SIZE * 2;//ARRAY_SIZE points
 
     chartView = new ChartView();
     chartView->initPolarChart();
@@ -94,11 +94,8 @@ void MainWindow::addOutputText(QString str)
 
 void MainWindow::plotUpdate(void)
 {
-    plot.addPlotData(package, plotPeriod);
-
-    char *p_pack = 0;
-    int size = 0;
-    chartView->updateData(p_pack, size);
+    //plot.addPlotData(package, plotPeriod);
+    chartView->updatePlot();
 }
 
 void MainWindow::readComBuffer()
@@ -107,20 +104,22 @@ void MainWindow::readComBuffer()
 
     while(comBuffer.isEmpty() == false)
     {
-        unsigned char size;
+        int size;
         unsigned char header = comBuffer[0];//for the warning
 
-        if(0x55 == header && comBuffer.size() > 1)
+        if(0x55 == header)
         {
             unsigned char id = comBuffer[1];//for the warning
 
             //real package size = header + id + data + checksum = 1 + 1 + size + 1 = size + 3
             if(0xff == id)
             {
+                //qDebug()<<"id 0xff check";
                 size = arraySize;
             }
             else
             {
+                //qDebug()<<"id other check";
                 size = package.packageList[package.packageIdMap[comBuffer[1]]].packageSize;
             }
 
@@ -137,13 +136,14 @@ void MainWindow::readComBuffer()
                     checksum += (unsigned char)comBuffer[count];
                 }
 
+                qDebug()<<"size"<<(size + 3 -1);
                 if(checksum == (unsigned char)comBuffer[size + 3 - 1])
                 {
                     char *p_pack = (char*)comBuffer.constData();
 
                     if(0xff == id)
                     {
-
+                        chartView->updateData((p_pack+2), size);
                     }
                     else
                     {
