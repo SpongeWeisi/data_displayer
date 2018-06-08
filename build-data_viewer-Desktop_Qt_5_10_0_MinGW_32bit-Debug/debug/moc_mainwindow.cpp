@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[23];
-    char stringdata0[416];
+    QByteArrayData data[26];
+    char stringdata0[458];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,33 +32,38 @@ struct qt_meta_stringdata_MainWindow_t {
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 10), // "plotUpdate"
-QT_MOC_LITERAL(2, 22, 0), // ""
-QT_MOC_LITERAL(3, 23, 13), // "readComBuffer"
-QT_MOC_LITERAL(4, 37, 11), // "handleError"
-QT_MOC_LITERAL(5, 49, 28), // "QSerialPort::SerialPortError"
-QT_MOC_LITERAL(6, 78, 5), // "error"
-QT_MOC_LITERAL(7, 84, 27), // "on_createConfigFile_clicked"
-QT_MOC_LITERAL(8, 112, 25), // "on_readConfigFile_clicked"
-QT_MOC_LITERAL(9, 138, 19), // "on_readData_clicked"
-QT_MOC_LITERAL(10, 158, 18), // "on_addPlot_clicked"
-QT_MOC_LITERAL(11, 177, 19), // "on_addGraph_clicked"
-QT_MOC_LITERAL(12, 197, 21), // "on_removePlot_clicked"
-QT_MOC_LITERAL(13, 219, 22), // "on_removeGraph_clicked"
-QT_MOC_LITERAL(14, 242, 20), // "on_startPlot_clicked"
-QT_MOC_LITERAL(15, 263, 23), // "on_packageTable_clicked"
-QT_MOC_LITERAL(16, 287, 5), // "index"
-QT_MOC_LITERAL(17, 293, 20), // "on_dataTable_clicked"
-QT_MOC_LITERAL(18, 314, 20), // "on_plotTable_clicked"
-QT_MOC_LITERAL(19, 335, 20), // "on_configCom_clicked"
-QT_MOC_LITERAL(20, 356, 18), // "on_openCom_clicked"
-QT_MOC_LITERAL(21, 375, 19), // "on_sendData_clicked"
-QT_MOC_LITERAL(22, 395, 20) // "on_clearPlot_clicked"
+QT_MOC_LITERAL(1, 11, 11), // "initialPlot"
+QT_MOC_LITERAL(2, 23, 0), // ""
+QT_MOC_LITERAL(3, 24, 10), // "plotUpdate"
+QT_MOC_LITERAL(4, 35, 13), // "readComBuffer"
+QT_MOC_LITERAL(5, 49, 11), // "handleError"
+QT_MOC_LITERAL(6, 61, 28), // "QSerialPort::SerialPortError"
+QT_MOC_LITERAL(7, 90, 5), // "error"
+QT_MOC_LITERAL(8, 96, 15), // "readParaIniFile"
+QT_MOC_LITERAL(9, 112, 13), // "updateComPara"
+QT_MOC_LITERAL(10, 126, 27), // "on_createConfigFile_clicked"
+QT_MOC_LITERAL(11, 154, 25), // "on_readConfigFile_clicked"
+QT_MOC_LITERAL(12, 180, 19), // "on_readData_clicked"
+QT_MOC_LITERAL(13, 200, 18), // "on_addPlot_clicked"
+QT_MOC_LITERAL(14, 219, 19), // "on_addGraph_clicked"
+QT_MOC_LITERAL(15, 239, 21), // "on_removePlot_clicked"
+QT_MOC_LITERAL(16, 261, 22), // "on_removeGraph_clicked"
+QT_MOC_LITERAL(17, 284, 20), // "on_startPlot_clicked"
+QT_MOC_LITERAL(18, 305, 23), // "on_packageTable_clicked"
+QT_MOC_LITERAL(19, 329, 5), // "index"
+QT_MOC_LITERAL(20, 335, 20), // "on_dataTable_clicked"
+QT_MOC_LITERAL(21, 356, 20), // "on_plotTable_clicked"
+QT_MOC_LITERAL(22, 377, 20), // "on_configCom_clicked"
+QT_MOC_LITERAL(23, 398, 18), // "on_openCom_clicked"
+QT_MOC_LITERAL(24, 417, 19), // "on_sendData_clicked"
+QT_MOC_LITERAL(25, 437, 20) // "on_clearPlot_clicked"
 
     },
-    "MainWindow\0plotUpdate\0\0readComBuffer\0"
-    "handleError\0QSerialPort::SerialPortError\0"
-    "error\0on_createConfigFile_clicked\0"
+    "MainWindow\0initialPlot\0\0plotUpdate\0"
+    "readComBuffer\0handleError\0"
+    "QSerialPort::SerialPortError\0error\0"
+    "readParaIniFile\0updateComPara\0"
+    "on_createConfigFile_clicked\0"
     "on_readConfigFile_clicked\0on_readData_clicked\0"
     "on_addPlot_clicked\0on_addGraph_clicked\0"
     "on_removePlot_clicked\0on_removeGraph_clicked\0"
@@ -76,7 +81,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      21,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -84,29 +89,33 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  104,    2, 0x08 /* Private */,
-       3,    0,  105,    2, 0x08 /* Private */,
-       4,    1,  106,    2, 0x08 /* Private */,
-       7,    0,  109,    2, 0x08 /* Private */,
-       8,    0,  110,    2, 0x08 /* Private */,
-       9,    0,  111,    2, 0x08 /* Private */,
-      10,    0,  112,    2, 0x08 /* Private */,
-      11,    0,  113,    2, 0x08 /* Private */,
-      12,    0,  114,    2, 0x08 /* Private */,
-      13,    0,  115,    2, 0x08 /* Private */,
-      14,    0,  116,    2, 0x08 /* Private */,
-      15,    1,  117,    2, 0x08 /* Private */,
-      17,    1,  120,    2, 0x08 /* Private */,
-      18,    1,  123,    2, 0x08 /* Private */,
-      19,    0,  126,    2, 0x08 /* Private */,
-      20,    0,  127,    2, 0x08 /* Private */,
-      21,    0,  128,    2, 0x08 /* Private */,
-      22,    0,  129,    2, 0x08 /* Private */,
+       1,    0,  119,    2, 0x08 /* Private */,
+       3,    0,  120,    2, 0x08 /* Private */,
+       4,    0,  121,    2, 0x08 /* Private */,
+       5,    1,  122,    2, 0x08 /* Private */,
+       8,    0,  125,    2, 0x08 /* Private */,
+       9,    0,  126,    2, 0x08 /* Private */,
+      10,    0,  127,    2, 0x08 /* Private */,
+      11,    0,  128,    2, 0x08 /* Private */,
+      12,    0,  129,    2, 0x08 /* Private */,
+      13,    0,  130,    2, 0x08 /* Private */,
+      14,    0,  131,    2, 0x08 /* Private */,
+      15,    0,  132,    2, 0x08 /* Private */,
+      16,    0,  133,    2, 0x08 /* Private */,
+      17,    0,  134,    2, 0x08 /* Private */,
+      18,    1,  135,    2, 0x08 /* Private */,
+      20,    1,  138,    2, 0x08 /* Private */,
+      21,    1,  141,    2, 0x08 /* Private */,
+      22,    0,  144,    2, 0x08 /* Private */,
+      23,    0,  145,    2, 0x08 /* Private */,
+      24,    0,  146,    2, 0x08 /* Private */,
+      25,    0,  147,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 5,    6,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 6,    7,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -115,9 +124,11 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QModelIndex,   16,
-    QMetaType::Void, QMetaType::QModelIndex,   16,
-    QMetaType::Void, QMetaType::QModelIndex,   16,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QModelIndex,   19,
+    QMetaType::Void, QMetaType::QModelIndex,   19,
+    QMetaType::Void, QMetaType::QModelIndex,   19,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -132,24 +143,27 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         MainWindow *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->plotUpdate(); break;
-        case 1: _t->readComBuffer(); break;
-        case 2: _t->handleError((*reinterpret_cast< QSerialPort::SerialPortError(*)>(_a[1]))); break;
-        case 3: _t->on_createConfigFile_clicked(); break;
-        case 4: _t->on_readConfigFile_clicked(); break;
-        case 5: _t->on_readData_clicked(); break;
-        case 6: _t->on_addPlot_clicked(); break;
-        case 7: _t->on_addGraph_clicked(); break;
-        case 8: _t->on_removePlot_clicked(); break;
-        case 9: _t->on_removeGraph_clicked(); break;
-        case 10: _t->on_startPlot_clicked(); break;
-        case 11: _t->on_packageTable_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
-        case 12: _t->on_dataTable_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
-        case 13: _t->on_plotTable_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
-        case 14: _t->on_configCom_clicked(); break;
-        case 15: _t->on_openCom_clicked(); break;
-        case 16: _t->on_sendData_clicked(); break;
-        case 17: _t->on_clearPlot_clicked(); break;
+        case 0: _t->initialPlot(); break;
+        case 1: _t->plotUpdate(); break;
+        case 2: _t->readComBuffer(); break;
+        case 3: _t->handleError((*reinterpret_cast< QSerialPort::SerialPortError(*)>(_a[1]))); break;
+        case 4: _t->readParaIniFile(); break;
+        case 5: _t->updateComPara(); break;
+        case 6: _t->on_createConfigFile_clicked(); break;
+        case 7: _t->on_readConfigFile_clicked(); break;
+        case 8: _t->on_readData_clicked(); break;
+        case 9: _t->on_addPlot_clicked(); break;
+        case 10: _t->on_addGraph_clicked(); break;
+        case 11: _t->on_removePlot_clicked(); break;
+        case 12: _t->on_removeGraph_clicked(); break;
+        case 13: _t->on_startPlot_clicked(); break;
+        case 14: _t->on_packageTable_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 15: _t->on_dataTable_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 16: _t->on_plotTable_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 17: _t->on_configCom_clicked(); break;
+        case 18: _t->on_openCom_clicked(); break;
+        case 19: _t->on_sendData_clicked(); break;
+        case 20: _t->on_clearPlot_clicked(); break;
         default: ;
         }
     }
@@ -180,13 +194,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 21;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 21)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 18;
+        _id -= 21;
     }
     return _id;
 }

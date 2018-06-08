@@ -45,15 +45,25 @@ QString PackageInterface::readConfigFile(QSettings &settings)
         settings.endGroup();
     }
 
+    qDebug()<<groupList;
+
     if(packageModifyLock == true)
         return "Package is locked";
     packageModifyLock = true;
 
     packageList.clear();
     packageIdMap.clear();
+    plotInfoList.clear();
 
     for(int pack_cnt = 0;pack_cnt < groupList.size();pack_cnt++)
     {
+        //read this information later
+        if(groupList[pack_cnt] == "plot"
+                || groupList[pack_cnt] == "initial"
+                || groupList[pack_cnt] == "command")
+            continue;
+
+        //read variable info
         struct PackageInfo packageInfo;
 
         packageInfo.packageName = groupList[pack_cnt];
@@ -69,14 +79,7 @@ QString PackageInterface::readConfigFile(QSettings &settings)
         for(int data_cnt = 0;data_cnt < keyList.size() - 1;data_cnt++)
         {
             struct DataInfo dataInfo;
-//            int dataNameMidCount = 0;
-//            QChar bottomLine = '_';
 
-//            for(int dataNameMidCount = 0;dataNameMidCount < keyList[data_cnt].size();dataNameMidCount++)
-//            {
-//                if(keyList[data_cnt].at(dataNameMidCount) == bottomLine)
-//                    break;
-//            }
             dataInfo.dataName = keyList[data_cnt].mid(3);
             dataInfo.dataTypeName = settings.value(keyList[data_cnt]).toString();
 
@@ -96,6 +99,7 @@ QString PackageInterface::readConfigFile(QSettings &settings)
             {
                 packageList.clear();
                 packageModifyLock = false;
+                qDebug()<<groupList[pack_cnt];
                 return QString("Undefined data type, package ID = %1, data index = %2").arg(packageInfo.packageId).arg(data_cnt);
             }
 
@@ -123,18 +127,78 @@ QString PackageInterface::readConfigFile(QSettings &settings)
     // for debug /////////////////////////////////////////////////////////////////////////////////
     for(int pack_cnt = 0;pack_cnt < packageList.size();pack_cnt++)
     {
-        qDebug()<<"Package info";
-        qDebug()<<packageList[pack_cnt].packageName<<packageList[pack_cnt].packageId
-               <<packageList[pack_cnt].packageSize;
+        qDebug()<<"******Package info******";
+        qDebug()<<packageList[pack_cnt].packageName
+                <<packageList[pack_cnt].packageId
+                <<packageList[pack_cnt].packageSize;
 
-        qDebug()<<"Data info";
+        qDebug()<<"***Data info***";
         for(int data_cnt = 0;data_cnt < packageList[pack_cnt].dataList.size();data_cnt++)
         {
             qDebug()<<packageList[pack_cnt].dataList[data_cnt].dataName
-                  <<packageList[pack_cnt].dataList[data_cnt].dataSize
-                 <<packageList[pack_cnt].dataList[data_cnt].data.typeName();
+                    <<packageList[pack_cnt].dataList[data_cnt].dataSize
+                    <<packageList[pack_cnt].dataList[data_cnt].data.typeName();
         }
     }
+
+    //read plot info ///////////////////////////////////////
+    int index = groupList.indexOf("plot");
+    if(index >= 0)
+    {
+        QList<struct PackagePlotInfo> plotInfoListInit;
+
+        settings.beginGroup(groupList[index]);
+
+        QStringList keyList = settings.childKeys();
+
+        //dataList is not a QStringList, cannot use indexof(), so check all data
+        for(int pack_cnt = 0;pack_cnt < packageList.size();pack_cnt++)
+        {
+            for(int data_cnt = 0;data_cnt < packageList[pack_cnt].dataList.size();data_cnt++)
+            {
+                int plotInfoIndex = keyList.indexOf(packageList[pack_cnt].dataList[data_cnt].dataName);
+                if(plotInfoIndex >= 0)
+                {
+                   struct PackagePlotInfo plotInfo;
+                   QStringList plotIdList;
+
+                   plotIdList = settings.value(keyList[plotInfoIndex]).toString().split('/');
+
+                   plotInfo.plotId =  plotIdList[0].toInt();
+                   plotInfo.graphId = plotIdList[1].toInt();
+
+                   plotInfo.packageId = pack_cnt;
+                   plotInfo.dataId = data_cnt;
+
+                   plotInfo.dataName = packageList[pack_cnt].dataList[data_cnt].dataName;
+
+                   plotInfoListInit.append(plotInfo);
+                }
+            }
+        }
+        
+        //adjust the order of plotInfo
+        QList<int> plotOrderList;
+        for(int plotInfoCnt = 0;plotInfoCnt < plotInfoListInit.size();plotInfoCnt++)
+        {
+            
+        }
+        
+
+        qDebug()<<"keyList"<<keyList;
+
+        for(int count = 0;count < plotInfoList.size();count++)
+        {
+            qDebug()<<plotInfoList[count].dataName
+                    <<plotInfoList[count].packageId
+                    <<plotInfoList[count].dataId
+                    <<plotInfoList[count].plotId
+                    <<plotInfoList[count].graphId;
+        }
+
+        settings.endGroup();
+    }
+
 
     packageModifyLock = false;
     return "Read congfig file OK";

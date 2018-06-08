@@ -28,35 +28,74 @@ MainWindow::MainWindow(QWidget *parent) :
     /**********************************************/
     serial = new QSerialPort(this);
     comSettings = new SettingsDialog;
+    comPara = comSettings->settings();
     connect(serial, SIGNAL(readyRead()), this, SLOT(readComBuffer()));
     connect(serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
+    connect(comSettings, SIGNAL(updateSignal()), this, SLOT(updateComPara()));
+
 
     /**********************************************/
+    sensorType.clear();
+    readParaIniFile();//get sensorType and other params
+    qDebug()<<sensorType;
+
     on_readConfigFile_clicked();
-    addNewPlot(0,0);
-    //plot.updatePlotTable(ui->plotTable);
-    addOutputText(plot.addNewGraph(0, package, 0, 1));
+    initialPlot();
+}
 
-    addNewPlot(0,2);
-    addOutputText(plot.addNewGraph(1, package, 0, 3));
+void MainWindow::initialPlot()
+{
+    for(int plotInfoCnt = 0;plotInfoCnt < package.plotInfoList.size();plotInfoCnt++)
+    {
 
-    addNewPlot(0,4);
-    addOutputText(plot.addNewGraph(2, package, 0, 5));
+    }
 
-    plot.updatePlotTable(ui->plotTable);
-    plot.updatePlot();
 
-    /**********************************************/
-    arraySize = ARRAY_SIZE * 2;//ARRAY_SIZE points
+    if(sensorType == "lidar")
+    {
+        addNewPlot(0,0);
+        //plot.updatePlotTable(ui->plotTable);
+        addOutputText(plot.addNewGraph(0, package, 0, 1));
 
-    chartView = new ChartView();
-    chartView->initPolarChart();
+        addNewPlot(0,2);
+        addOutputText(plot.addNewGraph(1, package, 0, 3));
 
-    arrayWindow.setCentralWidget(chartView);
-    arrayWindow.resize(800, 600);
-    arrayWindow.show();
+        addNewPlot(0,4);
+        addOutputText(plot.addNewGraph(2, package, 0, 5));
 
+        plot.updatePlotTable(ui->plotTable);
+        plot.updatePlot();
+
+        /**********************************************/
+        arraySize = ARRAY_SIZE * 2;//ARRAY_SIZE points
+
+        chartView = new ChartView();
+        chartView->initPolarChart();
+
+        arrayWindow.setCentralWidget(chartView);
+        arrayWindow.resize(800, 600);
+        arrayWindow.show();
+    }
+    else if(sensorType == "infrared")
+    {
+        addNewPlot(0,0);
+        addOutputText(plot.addNewGraph(0, package, 0, 12));
+
+        addNewPlot(0,4);
+
+        addNewPlot(0,2);
+
+        plot.updatePlotTable(ui->plotTable);
+        plot.updatePlot();
+    }
+    else if(sensorType == "ultrasonic")
+    {
+        addNewPlot(0,0);
+
+        plot.updatePlotTable(ui->plotTable);
+        plot.updatePlot();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -94,7 +133,7 @@ void MainWindow::addOutputText(QString str)
 
 void MainWindow::plotUpdate(void)
 {
-    //plot.addPlotData(package, plotPeriod);
+    plot.addPlotData(package, plotPeriod);
     chartView->updatePlot();
 }
 
@@ -176,7 +215,21 @@ void MainWindow::on_createConfigFile_clicked()
 
 void MainWindow::on_readConfigFile_clicked()
 {
-    QSettings settings("./config/config.ini",QSettings::IniFormat);
+    QString path;
+
+    if(sensorType.isNull())
+    {
+        path = "./config/config_template.ini";
+    }
+    else
+    {
+        path = "./config/config_";
+        path.append(sensorType);
+        path.append(".ini");
+    }
+
+    QSettings settings(path, QSettings::IniFormat);
+
     qDebug()<<package.readConfigFile(settings);
 
     package.setTableFormat(ui->packageTable,"package");
@@ -184,6 +237,8 @@ void MainWindow::on_readConfigFile_clicked()
 
     package.setTableFormat(ui->dataTable,"data");
     package.updateDataTable(ui->dataTable,0);
+
+
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -329,20 +384,24 @@ void MainWindow::on_configCom_clicked()
     comSettings->show();
 }
 
+void MainWindow::updateComPara()
+{
+    comPara = comSettings->settings();
+}
+
 void MainWindow::on_openCom_clicked()
 {
     if(serial->isOpen() == false)
     {
-        SettingsDialog::Settings p = comSettings->settings();
-        serial->setPortName(p.name);
-        serial->setBaudRate(p.baudRate);
-        serial->setDataBits(p.dataBits);
-        serial->setParity(p.parity);
-        serial->setStopBits(p.stopBits);
-        serial->setFlowControl(p.flowControl);
+        serial->setPortName(comPara.name);
+        serial->setBaudRate(comPara.baudRate);
+        serial->setDataBits(comPara.dataBits);
+        serial->setParity(comPara.parity);
+        serial->setStopBits(comPara.stopBits);
+        serial->setFlowControl(comPara.flowControl);
         if (serial->open(QIODevice::ReadWrite)) {
             addOutputText(QString("Connected to %1, baudrate = %2")
-                                  .arg(p.name).arg(p.stringBaudRate));
+                                  .arg(comPara.name).arg(comPara.stringBaudRate));
         } else {
             QMessageBox::critical(this, tr("Error"), serial->errorString());
         }
@@ -398,4 +457,34 @@ void MainWindow::on_sendData_clicked()
 void MainWindow::on_clearPlot_clicked()
 {
     plot.clearPlot();
+}
+
+void MainWindow::readParaIniFile()
+{
+    QSettings settings("./config/para.ini",QSettings::IniFormat);
+
+    if(settings.fileName().isNull())
+        return;
+
+    QStringList groupList = settings.childGroups();
+
+    if(groupList.size() == 0)
+        return;
+    settings.beginGroup("para");
+
+    int index = settings.childKeys().indexOf("baudrate");
+    if(index >= 0)
+    {
+        comPara.baudRate = settings.value(settings.childKeys().at(index)).toInt();
+    }
+
+    index = settings.childKeys().indexOf("sensorType");
+    if(index >= 0)
+    {
+        sensorType = settings.value(settings.childKeys().at(index)).toString();
+    }
+
+    settings.endGroup();
+
+    qDebug()<<comPara.baudRate<<sensorType;
 }

@@ -83,6 +83,9 @@ public:
 
     Settings settings() const;
 
+Q_SIGNALS:
+    void updateSignal();
+
 private slots:
     void showPortInfo(int idx);
     void apply();

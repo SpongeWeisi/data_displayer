@@ -190,6 +190,7 @@ QString PlotInterface::addPlotData(PackageInterface &packageInterface, int plotP
 
             plotList[cnt].customPlot->graph(graph_cnt)->rescaleValueAxis(true);
         }
+        plotList[cnt].customPlot->rescaleAxes(true);
         plotList[cnt].customPlot->xAxis->setRange(plotKey, 10, Qt::AlignRight);
         plotList[cnt].customPlot->replot();
     }

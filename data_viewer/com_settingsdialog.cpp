@@ -99,6 +99,7 @@ void SettingsDialog::apply()
 {
     updateSettings();
     hide();
+    emit updateSignal();
 }
 
 void SettingsDialog::checkCustomBaudRatePolicy(int idx)

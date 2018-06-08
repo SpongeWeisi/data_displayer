@@ -16,6 +16,17 @@ struct DataInfo
     int dataSize;
 };
 
+struct PackagePlotInfo
+{
+    QString dataName;
+
+    int packageId;
+    int dataId;
+
+    int plotId;
+    int graphId;
+};
+
 struct PackageInfo
 {
     QString packageName;
@@ -34,6 +45,7 @@ public:
     explicit PackageInterface(QObject *parent = 0);
 
     QList<struct PackageInfo> packageList;
+    QList<struct PackagePlotInfo> plotInfoList;
 
     QMap<QString, int> dataSignMap;
     QMap<QString, int> dataSizeMap;

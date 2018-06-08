@@ -51,6 +51,7 @@ public:
     SettingsDialog *comSettings;
     QSerialPort *serial;
     QByteArray comBuffer;
+    SettingsDialog::Settings comPara;
 
     //array
     int arraySize;
@@ -59,12 +60,18 @@ public:
     ChartView *chartView;
     QMainWindow arrayWindow;
 
+    QString sensorType;
+
 private slots:
     /*******************************************/
+    void initialPlot(void);
     void plotUpdate(void);
 
     void readComBuffer();
     void handleError(QSerialPort::SerialPortError error);
+
+    void readParaIniFile();
+    void updateComPara();
     /*******************************************/
 
     void on_createConfigFile_clicked();
